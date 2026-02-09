@@ -5,5 +5,21 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": ["source.fixAll.eslint"],
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "vue"],
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+
+  "tailwindCSS.includeLanguages": {
+    "vue": "html",
+    "vue-html": "html"
+  },
+  "tailwindCSS.classAttributes": ["class", "className", ":class", "v-bind:class"],
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "tailwindCSS.emmetCompletions": true,
+  // Optional but helps a lot in Vue
+  "emmet.includeLanguages": {
+    "vue-html": "html"
+  },
+  // If using Tailwind v4 and still having issues
+  "tailwindCSS.experimental.classRegex": [["tw`([^`]*)", "[\"'`]([^\"'`]*?)[\"'`]"]]
 }

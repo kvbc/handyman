@@ -1,43 +1,16 @@
-# HandyMan (handyman)
+# Handyman
 
-scheduling note taking app
+Features:
 
-## Install the dependencies
+- taking notes (w/ todo lists)
+- creating tasks
+- auto-scheduling tasks (timetable)
+- alarm/clock/pomodoro
+- calendar
 
-```bash
-yarn
-# or
-npm install
-```
+4 Tabs:
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
-
-```bash
-quasar dev
-```
-
-### Lint the files
-
-```bash
-yarn lint
-# or
-npm run lint
-```
-
-### Format the files
-
-```bash
-yarn format
-# or
-npm run format
-```
-
-### Build the app for production
-
-```bash
-quasar build
-```
-
-### Customize the configuration
-
-See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
+- notes
+- tasks
+- time
+- settings
