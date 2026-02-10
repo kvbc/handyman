@@ -38,13 +38,16 @@ export const useTasksStore = defineStore<'tasks', State, {}, Actions>('tasks', {
         priority: 1,
 
         creationDate: new Date(),
+        completionDate: null,
         dueDate: null,
+        estimatedDurationMinutes: 0,
 
         allowedDateRanges: [],
         blockedDateRanges: [],
 
         repeatDays: 0,
         repeatPerWeek: 0,
+        repeatHours: 0,
       };
       this.tasks.push(task);
       return id;
