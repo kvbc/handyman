@@ -21,11 +21,84 @@
         label="Priority"
         lazy-rules
         hide-bottom-space
-        :rules="[
-          (val) => (val !== null && val !== '') || 'Required',
-          (val) => Number.isInteger(Number(val)) || 'Please enter a whole number',
-        ]"
+        :rules="numberInputRules"
       />
+
+      <div class="text-h5 bg-primary text-white q-pa-xs">Start</div>
+
+      <div>
+        Prefer timing
+        <q-option-group
+          v-model="preferTiming"
+          :options="preferTimingOptions"
+          color="primary"
+          dense
+          inline
+        />
+      </div>
+      <q-toggle v-model="allowChainingSessions" label="Allow session chaining" dense />
+      <div v-if="allowChainingSessions">
+        Prefer session chaining
+        <q-option-group
+          v-model="preferChainingSessions"
+          :options="preferChainingSessionsOptions"
+          color="primary"
+          dense
+          inline
+        />
+      </div>
+      <q-input
+        outlined
+        type="number"
+        v-model.number="minSessionsPerDay"
+        label="Min. sessions per day"
+        lazy-rules
+        hide-bottom-space
+      />
+      <q-input
+        outlined
+        type="number"
+        v-model.number="minSessionsPerWeek"
+        label="Min. sessions per week"
+        lazy-rules
+        hide-bottom-space
+      />
+      <q-input
+        outlined
+        type="number"
+        v-model.number="minHoursPerWeek"
+        label="Min. hours per week"
+        lazy-rules
+        hide-bottom-space
+      />
+      <div class="text-red">Task Bounds</div>
+      <div class="text-red">Allow Timestamps</div>
+      <div class="text-red">Prefer Timestamps</div>
+      <div class="text-red">Avoid Timestamps</div>
+      <div class="text-red">Block Timestamps</div>
+
+      <div class="text-h5 bg-primary text-white q-pa-xs">Duration</div>
+
+      <q-toggle v-model="allowSessionSplitting" label="Allow session splitting" dense />
+      <q-input
+        outlined
+        type="number"
+        v-model.number="minSessionDurationMinutes"
+        label="Min. session duration (minutes)"
+        lazy-rules
+        hide-bottom-space
+      />
+      <q-input
+        outlined
+        type="number"
+        v-model.number="maxSessionDurationMinutes"
+        label="Max. session duration (minutes)"
+        lazy-rules
+        hide-bottom-space
+      />
+
+      <div class="text-h5 bg-primary text-white q-pa-xs">End</div>
+
       <q-input
         outlined
         v-model="dueDateInput"
@@ -43,6 +116,7 @@
           </q-icon>
         </template>
       </q-input>
+
       <div
         class="flex items-center text-caption text-grey-7 q-gutter-x-sm q-mt-none q-pa-sm bg-grey-2"
       >
@@ -61,6 +135,31 @@
           />
         </span>
       </div>
+      <q-input
+        outlined
+        type="number"
+        v-model.number="maxSessionsPerDay"
+        label="Max. sessions per day"
+        lazy-rules
+        hide-bottom-space
+      />
+      <q-input
+        outlined
+        type="number"
+        v-model.number="maxSessionsPerWeek"
+        label="Max. sessions per week"
+        lazy-rules
+        hide-bottom-space
+      />
+      <q-input
+        outlined
+        type="number"
+        v-model.number="maxHoursPerWeek"
+        label="Max. hours per week"
+        lazy-rules
+        hide-bottom-space
+      />
+      <br />
     </q-form>
     <q-space />
     <div class="flex justify-between">
@@ -103,6 +202,53 @@ const name = ref<null | string>(null);
 const brief = ref<null | string>(null);
 const priority = ref<null | number>(null);
 const dueDate = ref<null | string>(null);
+const preferTiming = ref<null | 'earlier' | 'later'>(null);
+const allowChainingSessions = ref<boolean>(false);
+const preferChainingSessions = ref<boolean | null>(null);
+const minSessionsPerDay = ref<number | null>(null);
+const minSessionsPerWeek = ref<number | null>(null);
+const minHoursPerWeek = ref<number | null>(null);
+const maxSessionsPerDay = ref<number | null>(null);
+const maxSessionsPerWeek = ref<number | null>(null);
+const maxHoursPerWeek = ref<number | null>(null);
+const allowSessionSplitting = ref<boolean>(false);
+const minSessionDurationMinutes = ref<number>(15);
+const maxSessionDurationMinutes = ref<number | null>(null);
+
+const preferTimingOptions = [
+  {
+    label: 'Unspecified',
+    value: null,
+  },
+  {
+    label: 'Earlier',
+    value: 'earlier',
+  },
+  {
+    label: 'Later',
+    value: 'later',
+  },
+];
+
+const preferChainingSessionsOptions = [
+  {
+    label: 'Unspecified',
+    value: null,
+  },
+  {
+    label: 'Yes',
+    value: true,
+  },
+  {
+    label: 'No',
+    value: false,
+  },
+];
+
+const numberInputRules = [
+  (val: unknown) => (val !== null && val !== '') || 'Required',
+  (val: unknown) => Number.isInteger(Number(val)) || 'Please enter a whole number',
+];
 
 //
 //

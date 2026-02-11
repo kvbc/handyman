@@ -33,21 +33,34 @@ export const useTasksStore = defineStore<'tasks', State, {}, Actions>('tasks', {
       const id = ++this.tasksEverCreated;
       const task: Task = {
         id,
+        // metadata
         name: '',
         brief: '',
         priority: 1,
-
         creationDate: new Date(),
         completionDate: null,
+        completedHoursTotal: 0,
+        // when start
+        preferTiming: null,
+        allowChainingSessions: false,
+        preferChainingSessions: null,
+        minSessionsPerDay: null,
+        minSessionsPerWeek: null,
+        minHoursPerWeek: null,
+        taskBounds: [],
+        allowTimespans: [],
+        preferTimespans: [],
+        avoidTimespans: [],
+        blockTimespans: [],
+        // how long
+        allowSessionSplitting: false,
+        minSessionDurationMinutes: 0,
+        maxSessionDurationMinutes: null,
+        // when end
         dueDate: null,
-        estimatedDurationMinutes: 0,
-
-        allowedDateRanges: [],
-        blockedDateRanges: [],
-
-        repeatDays: 0,
-        repeatPerWeek: 0,
-        repeatHours: 0,
+        maxSessionsPerDay: null,
+        maxSessionsPerWeek: null,
+        maxHoursPerWeek: null,
       };
       this.tasks.push(task);
       return id;

@@ -5,36 +5,44 @@ export interface TaskBound {
   priority: number;
 }
 
+export interface Timespan {
+  rrText: string;
+  startMinutes: number;
+  endMinutes: number;
+}
+
 export interface Task {
   id: number;
+
+  // metadata
   name: string;
   brief: string;
   priority: number;
-  timezone: string;
-
   creationDate: Date;
   completionDate: Date | null;
   completedHoursTotal: number;
 
   // when to start it
+  preferTiming: 'earlier' | 'later' | null;
+  allowChainingSessions: boolean;
+  preferChainingSessions: boolean | null;
+  minSessionsPerDay: number | null;
+  minSessionsPerWeek: number | null;
+  minHoursPerWeek: number | null;
   taskBounds: TaskBound[];
-  preferEarlierSessions?: boolean; // or later
-  preferChainingSessions?: boolean;
-  allowSessionSplitting?: boolean;
-  allowDatesRRText: string;
-  preferredDatesRRText: string;
-  avoidDatesRRText: string;
-  blockDatesRRText: string;
-  maxSessionsPerDay: number;
-  minSessionsPerWeek: number;
-  minHoursPerWeek: number;
+  allowTimespans: Timespan[];
+  preferTimespans: Timespan[];
+  avoidTimespans: Timespan[];
+  blockTimespans: Timespan[];
 
   // for how long
+  allowSessionSplitting: boolean;
   minSessionDurationMinutes: number;
-  maxSessionDurationMinutes: number;
+  maxSessionDurationMinutes: number | null;
 
   // when to end it
   dueDate: Date | null;
-  maxSessionsPerWeek: number;
-  maxHoursPerWeek: number;
+  maxSessionsPerDay: number | null;
+  maxSessionsPerWeek: number | null;
+  maxHoursPerWeek: number | null;
 }
