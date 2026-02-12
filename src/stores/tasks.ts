@@ -42,8 +42,7 @@ export const useTasksStore = defineStore<'tasks', State, {}, Actions>('tasks', {
         completedHoursTotal: 0,
         // when start
         preferTiming: null,
-        allowChainingSessions: false,
-        preferChainingSessions: null,
+        preferSessionChaining: false,
         minSessionsPerDay: null,
         minSessionsPerWeek: null,
         minHoursPerWeek: null,
@@ -54,7 +53,7 @@ export const useTasksStore = defineStore<'tasks', State, {}, Actions>('tasks', {
         blockTimespans: [],
         // how long
         allowSessionSplitting: false,
-        minSessionDurationMinutes: 0,
+        minSessionDurationMinutes: 10,
         maxSessionDurationMinutes: null,
         // when end
         dueDate: null,

@@ -1,14 +1,17 @@
 export interface TaskBound {
+  id: string;
   position: 'before' | 'after';
   adjacent: boolean; // right before or right after
-  taskIds: number[];
+  parentTaskId: number;
+  childTaskIds: number[];
   priority: number;
 }
 
 export interface Timespan {
+  id: string;
   rrText: string;
-  startMinutes: number;
-  endMinutes: number;
+  startHour: number;
+  endHour: number;
 }
 
 export interface Task {
@@ -24,8 +27,7 @@ export interface Task {
 
   // when to start it
   preferTiming: 'earlier' | 'later' | null;
-  allowChainingSessions: boolean;
-  preferChainingSessions: boolean | null;
+  preferSessionChaining: boolean;
   minSessionsPerDay: number | null;
   minSessionsPerWeek: number | null;
   minHoursPerWeek: number | null;

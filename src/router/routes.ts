@@ -8,7 +8,7 @@ const routes: RouteRecordRaw[] = [
       { path: '', component: () => import('pages/IndexPage.vue') },
       {
         path: 'tasks',
-        component: () => import('pages/TasksPage.vue'),
+        component: () => import('pages/TaskListPage.vue'),
       },
       {
         path: 'tasks/:id/edit',
