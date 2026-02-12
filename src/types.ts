@@ -1,4 +1,4 @@
-export interface TaskBound {
+export interface TaskRelation {
   id: string;
   position: 'before' | 'after';
   adjacent: boolean; // right before or right after
@@ -12,6 +12,7 @@ export interface Timespan {
   rrText: string;
   startHour: number;
   endHour: number;
+  constraint: 'hard' | 'soft';
 }
 
 export interface Task {
@@ -21,9 +22,12 @@ export interface Task {
   name: string;
   brief: string;
   priority: number;
+  startDate: Date | null;
   creationDate: Date;
   completionDate: Date | null;
   completedHoursTotal: number;
+  // TODO status taska
+  // TODO timezone
 
   // when to start it
   preferTiming: 'earlier' | 'later' | null;
@@ -31,11 +35,10 @@ export interface Task {
   minSessionsPerDay: number | null;
   minSessionsPerWeek: number | null;
   minHoursPerWeek: number | null;
-  taskBounds: TaskBound[];
+  minHoursBetweenSessions: number | null;
+  taskRelations: TaskRelation[];
   allowTimespans: Timespan[];
-  preferTimespans: Timespan[];
-  avoidTimespans: Timespan[];
-  blockTimespans: Timespan[];
+  denyTimespans: Timespan[];
 
   // for how long
   allowSessionSplitting: boolean;
@@ -44,6 +47,7 @@ export interface Task {
 
   // when to end it
   dueDate: Date | null;
+  dueDateConstraint: 'hard' | 'soft';
   maxSessionsPerDay: number | null;
   maxSessionsPerWeek: number | null;
   maxHoursPerWeek: number | null;

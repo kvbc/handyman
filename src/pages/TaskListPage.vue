@@ -23,22 +23,33 @@
           class="q-mb-sm bg-grey-3"
         >
           <q-card-section class="q-pa-sm">
-            <div class="text-h6">
-              {{ task.name }}
+            <div class="text-h6 row items-center q-gutter-x-sm">
+              <div>
+                {{ task.name ? task.name : '???' }}
+              </div>
               <q-badge align="middle" :style="{ backgroundColor: getPriorityColor(task.priority) }">
-                P {{ task.priority }}
+                <q-icon name="local_fire_department" class="self-center q-mr-xs" />
+                {{ task.priority }}
+              </q-badge>
+              <q-badge align="middle" color="primary">
+                <q-icon name="event_note" class="self-center q-mr-xs" />
+                {{ date.formatDate(task.creationDate, 'DD.MM.YYYY') }}
               </q-badge>
             </div>
             <div class="text-caption text-grey-8">
               {{ task.brief }}
             </div>
             <div class="row items-center">
-              <q-icon name="alarm" class="q-mr-xs" />
-              <span>{{ date.formatDate(task.creationDate, 'DD.MM.YYYY') }}</span>
-
+              <q-icon name="rocket_launch" class="q-mr-xs" />
+              <span>{{
+                task.startDate ? date.formatDate(task.startDate, 'DD.MM.YYYY') : '???'
+              }}</span>
               <template v-if="task.dueDate">
-                <q-icon name="arrow_right_alt" class="q-ml-xs q-mr-xs" />
+                <!-- <q-icon name="arrow_right_alt" class="q-ml-xs q-mr-xs" /> -->
+                <q-icon name="event_available" class="q-ml-md q-mr-xs" />
                 <span>{{ date.formatDate(task.dueDate, 'DD.MM.YYYY') }}</span>
+                <q-icon name="hourglass_bottom" class="q-ml-md q-mr-xs" />
+                <span class="text-negative">{{ getDaysLeftLabel(task.dueDate) }}</span>
               </template>
             </div>
           </q-card-section>
@@ -134,5 +145,28 @@ async function handleTaskEditButtonClicked(taskId: number) {
 
 function handleTaskDeleteButtonClicked(taskId: number) {
   tasksStore.deleteTask(taskId);
+}
+
+function getDaysLeft(dueDate: Date | string) {
+  const today = new Date();
+  const due = new Date(dueDate);
+
+  // wyzeruj godziny żeby liczyć pełne dni
+  today.setHours(0, 0, 0, 0);
+  due.setHours(0, 0, 0, 0);
+
+  const diffMs = due.getTime() - today.getTime();
+  const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+  return diffDays;
+}
+
+function getDaysLeftLabel(dueDate: Date | string) {
+  const days = getDaysLeft(dueDate);
+
+  if (days < 0) return `${Math.abs(days)} days overdue`;
+  if (days === 0) return 'Due today';
+  if (days === 1) return '1 day left';
+  return `${days} days left`;
 }
 </script>

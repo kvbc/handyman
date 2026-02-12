@@ -24,6 +24,17 @@
           hide-bottom-space
         />
       </div>
+      <div class="row items-center justify-between">
+        <div>Constraint</div>
+        <q-btn-toggle
+          v-model="model.constraint"
+          size="sm"
+          push
+          glossy
+          toggle-color="primary"
+          :options="constraintOptions"
+        />
+      </div>
     </div>
     <slot />
   </div>
@@ -33,4 +44,15 @@
 import type { Timespan } from 'src/types';
 
 const model = defineModel<Timespan>({ required: true });
+
+const constraintOptions = [
+  {
+    label: 'Hard',
+    value: 'hard',
+  },
+  {
+    label: 'Soft',
+    value: 'soft',
+  },
+];
 </script>

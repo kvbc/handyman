@@ -43,6 +43,7 @@ const handleAddButtonClicked = () => {
       rrText: '',
       startHour: 0,
       endHour: 24,
+      constraint: 'hard',
     },
   ];
 };

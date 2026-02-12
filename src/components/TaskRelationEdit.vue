@@ -70,10 +70,10 @@
 
 <script setup lang="ts">
 import { useTasksStore } from 'src/stores/tasks';
-import type { TaskBound } from 'src/types';
+import type { TaskRelation } from 'src/types';
 import { computed, ref } from 'vue';
 
-const model = defineModel<TaskBound>({ required: true });
+const model = defineModel<TaskRelation>({ required: true });
 const tasksStore = useTasksStore();
 const selectedTaskId = ref<number | null>(null);
 const modelTasks = computed(() =>
@@ -104,7 +104,7 @@ const taskSelectOptions = computed(() =>
 
 const handleAddTaskButtonClicked = () => {
   if (selectedTaskId.value) {
-    console.log('add task', selectedTaskId.value, 'to task bound', model.value.id);
+    console.log('add task', selectedTaskId.value, 'to task relation', model.value.id);
     model.value.childTaskIds = [...model.value.childTaskIds, selectedTaskId.value];
     selectedTaskId.value = null;
   }

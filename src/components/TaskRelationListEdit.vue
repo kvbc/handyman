@@ -1,6 +1,10 @@
 <template>
   <div class="q-gutter-y-sm">
-    <task-bound-edit v-for="(bound, index) in model" v-bind:key="bound.id" v-model="model[index]!">
+    <task-relation-edit
+      v-for="(relation, index) in model"
+      v-bind:key="relation.id"
+      v-model="model[index]!"
+    >
       <q-btn
         class="q-pa-sm"
         size="sm"
@@ -8,9 +12,9 @@
         icon="delete"
         glossy
         no-caps
-        v-on:click="handleDeleteButtonClicked(bound.id)"
+        v-on:click="handleDeleteButtonClicked(relation.id)"
       />
-    </task-bound-edit>
+    </task-relation-edit>
     <q-btn
       size="sm"
       color="primary"
@@ -25,16 +29,16 @@
 </template>
 
 <script setup lang="ts">
-import type { TaskBound } from 'src/types';
-import TaskBoundEdit from './TaskBoundEdit.vue';
+import type { TaskRelation } from 'src/types';
 import { generateRandomUUID } from 'src/utils';
+import TaskRelationEdit from './TaskRelationEdit.vue';
 
-const model = defineModel<TaskBound[]>({ required: true });
+const model = defineModel<TaskRelation[]>({ required: true });
 
-export interface TaskBoundListEditProps {
+export interface TaskRelationListEditProps {
   parentTaskId: number;
 }
-const props = defineProps<TaskBoundListEditProps>();
+const props = defineProps<TaskRelationListEditProps>();
 
 const handleAddButtonClicked = () => {
   model.value = [
@@ -50,7 +54,7 @@ const handleAddButtonClicked = () => {
   ];
 };
 
-const handleDeleteButtonClicked = (boundId: string) => {
-  model.value = model.value.filter((bound) => bound.id !== boundId);
+const handleDeleteButtonClicked = (id: string) => {
+  model.value = model.value.filter((relation) => relation.id !== id);
 };
 </script>
