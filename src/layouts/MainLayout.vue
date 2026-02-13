@@ -4,7 +4,7 @@
       <q-toolbar>
         <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
 
-        <q-toolbar-title> Striker </q-toolbar-title>
+        <q-toolbar-title> Sanctum </q-toolbar-title>
 
         <div>v0.0.1</div>
       </q-toolbar>
@@ -12,7 +12,7 @@
 
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <q-list>
-        <q-item-label header> Striker </q-item-label>
+        <q-item-label header> Sanctum </q-item-label>
 
         <EssentialLink v-for="link in linksList" :key="link.title" v-bind="link" />
       </q-list>

@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex column">
+  <q-page class="flex column fit">
     <div class="q-pa-md">
       <div class="text-h5">Editing Task #{{ taskId }}</div>
       <div class="flex text-grey-8 q-mb-xs">
@@ -8,210 +8,214 @@
       </div>
       <q-separator />
     </div>
-    <q-form
-      ref="form"
-      @submit="handleSubmitButtonClicked"
-      @reset="handleCancelButtonClicked"
-      class="q-gutter-y-md"
-    >
-      <div class="q-gutter-y-sm q-px-md">
-        <q-input outlined v-model="name" label="Name" dense />
-        <q-input outlined v-model="brief" label="Brief" dense />
-        <q-input
-          outlined
-          dense
-          type="number"
-          v-model.number="priority"
-          label="Priority"
-          lazy-rules
-          hide-bottom-space
-          :rules="numberInputRules"
-        />
-        <date-field v-model="startDate" label="Start date" :base-date="task.creationDate" />
-      </div>
-
-      <div class="bg-blue-grey text-white row items-center">
-        <div class="col" />
-        <div class="col text-center text-body1 text-bold">Start</div>
-        <div class="col text-right">
-          <q-btn round size="sm" dense flat icon="info">
-            <q-menu anchor="bottom right" self="top right">
-              <div class="q-pa-sm" style="max-width: 250px">
-                Factors that determine when a session is scheduled
-              </div>
-            </q-menu>
-          </q-btn>
+    <div class="col scroll q-pb-xl q-mb-xl">
+      <q-form
+        ref="form"
+        @submit="handleSubmitButtonClicked"
+        @reset="handleCancelButtonClicked"
+        class="q-gutter-y-md"
+      >
+        <div class="q-gutter-y-sm q-px-md">
+          <q-input outlined v-model="name" label="Name" dense />
+          <q-input outlined v-model="brief" label="Brief" dense />
+          <q-input
+            outlined
+            dense
+            type="number"
+            v-model.number="priority"
+            label="Priority"
+            lazy-rules
+            hide-bottom-space
+            :rules="numberInputRules"
+          />
+          <date-field v-model="startDate" label="Start date" :base-date="task.creationDate" />
         </div>
-      </div>
 
-      <div class="q-gutter-y-sm q-px-md">
-        <div class="row items-center justify-between">
-          <div>Prefer timing</div>
-          <q-btn-toggle
-            v-model="preferTiming"
-            size="sm"
-            push
-            glossy
-            toggle-color="primary"
-            :options="preferTimingOptions"
+        <div class="bg-blue-grey text-white row items-center">
+          <div class="col" />
+          <div class="col text-center text-body1 text-bold">Start</div>
+          <div class="col text-right">
+            <q-btn round size="sm" dense flat icon="info">
+              <q-menu anchor="bottom right" self="top right">
+                <div class="q-pa-sm" style="max-width: 250px">
+                  Factors that determine when a session is scheduled
+                </div>
+              </q-menu>
+            </q-btn>
+          </div>
+        </div>
+
+        <div class="q-gutter-y-sm q-px-md">
+          <div class="row items-center justify-between">
+            <div>Prefer timing</div>
+            <q-btn-toggle
+              v-model="preferTiming"
+              size="sm"
+              push
+              glossy
+              toggle-color="primary"
+              :options="preferTimingOptions"
+            />
+          </div>
+          <div class="row items-center justify-between">
+            <div>Prefer session chaining</div>
+            <q-toggle v-model="preferSessionChaining" dense />
+          </div>
+          <q-input
+            outlined
+            type="number"
+            v-model.number="minSessionsPerDay"
+            label="Min. sessions per day"
+            lazy-rules
+            hide-bottom-space
+            dense
+          />
+          <q-input
+            outlined
+            type="number"
+            v-model.number="minSessionsPerWeek"
+            label="Min. sessions per week"
+            lazy-rules
+            hide-bottom-space
+            dense
+          />
+          <q-input
+            outlined
+            type="number"
+            v-model.number="minHoursPerWeek"
+            label="Min. hours per week"
+            lazy-rules
+            hide-bottom-space
+            dense
+          />
+          <q-input
+            outlined
+            type="number"
+            v-model.number="minHoursBetweenSessions"
+            label="Min. hours between sessions"
+            lazy-rules
+            hide-bottom-space
+            dense
+          />
+          <div>
+            <div
+              class="bg-blue-grey-4 text-white q-mb-sm row items-center justify-center q-gutter-x-xs"
+            >
+              <q-icon name="account_tree" />
+              <div>Task Relations</div>
+            </div>
+            <task-relation-list-edit v-model="taskRelations" :parent-task-id="taskId" />
+          </div>
+          <div>
+            <div
+              class="bg-blue-grey-4 text-white q-mb-sm row items-center justify-center q-gutter-x-xs"
+            >
+              <q-icon name="event_available" />
+              <div>Allow Timestamps</div>
+            </div>
+            <timespan-list-edit v-model="allowTimestamps" />
+          </div>
+          <div>
+            <div
+              class="bg-blue-grey-4 text-white q-mb-sm row items-center justify-center q-gutter-x-xs"
+            >
+              <q-icon name="block" />
+              <div>Deny Timestamps</div>
+            </div>
+            <timespan-list-edit v-model="denyTimestamps" />
+          </div>
+        </div>
+
+        <div class="text-body1 text-bold bg-blue-grey text-white text-center">Duration</div>
+
+        <div class="q-gutter-y-sm q-px-md">
+          <div class="row items-center justify-between">
+            <div>Allow session splitting</div>
+            <q-toggle v-model="allowSessionSplitting" dense />
+          </div>
+          <q-input
+            outlined
+            type="number"
+            v-model.number="minSessionDurationMinutes"
+            label="Min. session duration (minutes)"
+            lazy-rules
+            dense
+            hide-bottom-space
+          />
+          <q-input
+            outlined
+            type="number"
+            v-model.number="maxSessionDurationMinutes"
+            label="Max. session duration (minutes)"
+            lazy-rules
+            dense
+            hide-bottom-space
           />
         </div>
-        <div class="row items-center justify-between">
-          <div>Prefer session chaining</div>
-          <q-toggle v-model="preferSessionChaining" dense />
-        </div>
-        <q-input
-          outlined
-          type="number"
-          v-model.number="minSessionsPerDay"
-          label="Min. sessions per day"
-          lazy-rules
-          hide-bottom-space
-          dense
-        />
-        <q-input
-          outlined
-          type="number"
-          v-model.number="minSessionsPerWeek"
-          label="Min. sessions per week"
-          lazy-rules
-          hide-bottom-space
-          dense
-        />
-        <q-input
-          outlined
-          type="number"
-          v-model.number="minHoursPerWeek"
-          label="Min. hours per week"
-          lazy-rules
-          hide-bottom-space
-          dense
-        />
-        <q-input
-          outlined
-          type="number"
-          v-model.number="minHoursBetweenSessions"
-          label="Min. hours between sessions"
-          lazy-rules
-          hide-bottom-space
-          dense
-        />
-        <div>
-          <div
-            class="bg-blue-grey-4 text-white q-mb-sm row items-center justify-center q-gutter-x-xs"
-          >
-            <q-icon name="account_tree" />
-            <div>Task Relations</div>
+
+        <div class="text-body1 text-bold bg-blue-grey text-white text-center">End</div>
+
+        <div class="q-gutter-y-sm q-px-md">
+          <date-field v-model="dueDate" label="Due date" :base-date="baseDateForDueDate" />
+          <div class="row items-center justify-between">
+            <div>Due date constraint</div>
+            <q-btn-toggle
+              v-model="dueDateConstraint"
+              size="sm"
+              push
+              glossy
+              toggle-color="primary"
+              :options="dueDateConstraintOptions"
+            />
           </div>
-          <task-relation-list-edit v-model="taskRelations" :parent-task-id="taskId" />
-        </div>
-        <div>
-          <div
-            class="bg-blue-grey-4 text-white q-mb-sm row items-center justify-center q-gutter-x-xs"
-          >
-            <q-icon name="event_available" />
-            <div>Allow Timestamps</div>
-          </div>
-          <timespan-list-edit v-model="allowTimestamps" />
-        </div>
-        <div>
-          <div
-            class="bg-blue-grey-4 text-white q-mb-sm row items-center justify-center q-gutter-x-xs"
-          >
-            <q-icon name="block" />
-            <div>Deny Timestamps</div>
-          </div>
-          <timespan-list-edit v-model="denyTimestamps" />
-        </div>
-      </div>
-
-      <div class="text-body1 text-bold bg-blue-grey text-white text-center">Duration</div>
-
-      <div class="q-gutter-y-sm q-px-md">
-        <div class="row items-center justify-between">
-          <div>Allow session splitting</div>
-          <q-toggle v-model="allowSessionSplitting" dense />
-        </div>
-        <q-input
-          outlined
-          type="number"
-          v-model.number="minSessionDurationMinutes"
-          label="Min. session duration (minutes)"
-          lazy-rules
-          dense
-          hide-bottom-space
-        />
-        <q-input
-          outlined
-          type="number"
-          v-model.number="maxSessionDurationMinutes"
-          label="Max. session duration (minutes)"
-          lazy-rules
-          dense
-          hide-bottom-space
-        />
-      </div>
-
-      <div class="text-body1 text-bold bg-blue-grey text-white text-center">End</div>
-
-      <div class="q-gutter-y-sm q-px-md">
-        <date-field v-model="dueDate" label="Due date" :base-date="baseDateForDueDate" />
-        <div class="row items-center justify-between">
-          <div>Due date constraint</div>
-          <q-btn-toggle
-            v-model="dueDateConstraint"
-            size="sm"
-            push
-            glossy
-            toggle-color="primary"
-            :options="dueDateConstraintOptions"
+          <q-input
+            outlined
+            type="number"
+            v-model.number="maxSessionsPerDay"
+            label="Max. sessions per day"
+            lazy-rules
+            hide-bottom-space
+            dense
+          />
+          <q-input
+            outlined
+            type="number"
+            v-model.number="maxSessionsPerWeek"
+            label="Max. sessions per week"
+            lazy-rules
+            hide-bottom-space
+            dense
+          />
+          <q-input
+            outlined
+            type="number"
+            v-model.number="maxHoursPerWeek"
+            label="Max. hours per week"
+            lazy-rules
+            hide-bottom-space
+            dense
           />
         </div>
-        <q-input
-          outlined
-          type="number"
-          v-model.number="maxSessionsPerDay"
-          label="Max. sessions per day"
-          lazy-rules
-          hide-bottom-space
-          dense
-        />
-        <q-input
-          outlined
-          type="number"
-          v-model.number="maxSessionsPerWeek"
-          label="Max. sessions per week"
-          lazy-rules
-          hide-bottom-space
-          dense
-        />
-        <q-input
-          outlined
-          type="number"
-          v-model.number="maxHoursPerWeek"
-          label="Max. hours per week"
-          lazy-rules
-          hide-bottom-space
-          dense
-        />
-      </div>
-    </q-form>
-    <div class="flex justify-between q-pa-md q-mt-md bg-grey-3">
-      <q-btn
-        color="negative"
-        label="Cancel"
-        no-caps
-        type="reset"
-        v-on:click="handleCancelButtonClicked"
-      />
-      <q-btn
-        color="primary"
-        label="Save"
-        no-caps
-        type="submit"
-        v-on:click="handleSubmitButtonClicked"
-      />
+      </q-form>
     </div>
+    <q-page-sticky position="bottom" expand class="bg-grey-3 q-pa-md">
+      <div class="row justify-between full-width">
+        <q-btn
+          color="negative"
+          label="Cancel"
+          no-caps
+          type="reset"
+          v-on:click="handleCancelButtonClicked"
+        />
+        <q-btn
+          color="primary"
+          label="Save"
+          no-caps
+          type="submit"
+          v-on:click="handleSubmitButtonClicked"
+        />
+      </div>
+    </q-page-sticky>
   </q-page>
 </template>
 
@@ -225,7 +229,7 @@
 import { useRoute, useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
 import { computed, onMounted, ref } from 'vue';
-import { useTasksStore } from 'src/stores/tasks';
+import { useTasksStore } from 'src/stores/useTasksStore';
 import { QForm } from 'quasar';
 import { date } from 'quasar';
 import type { TaskRelation, Timespan } from 'src/types';
@@ -244,8 +248,8 @@ const form = ref<null | QForm>(null);
 const name = ref<null | string>(null);
 const brief = ref<null | string>(null);
 const priority = ref<null | number>(null);
-const startDate = ref<null | string>(null);
-const dueDate = ref<null | string>(null);
+const startDate = ref<null | Date>(null);
+const dueDate = ref<null | Date>(null);
 const dueDateConstraint = ref<'hard' | 'soft'>('hard');
 const preferTiming = ref<null | 'earlier' | 'later'>(null);
 const preferSessionChaining = ref<boolean>(false);
@@ -290,11 +294,7 @@ const dueDateConstraintOptions = [
 ];
 
 const baseDateForDueDate = computed<Date | null>(() => {
-  if (startDate.value) {
-    const parsed = date.extractDate(startDate.value, 'YYYY-MM-DD');
-    return parsed ?? null;
-  }
-  return task.creationDate ?? null;
+  return startDate.value ?? task.creationDate ?? null;
 });
 
 const numberInputRules = [
@@ -319,7 +319,7 @@ function handleSubmitButtonClicked() {
   task.name = name.value ?? '';
   task.brief = brief.value ?? '';
   task.priority = priority.value ?? 1;
-  task.startDate = startDate.value ? new Date(startDate.value + 'T00:00:00') : null;
+  task.startDate = startDate.value ?? null;
   // start
   task.preferTiming = preferTiming.value;
   task.preferSessionChaining = preferSessionChaining.value;
@@ -335,7 +335,7 @@ function handleSubmitButtonClicked() {
   task.minSessionDurationMinutes = minSessionDurationMinutes.value;
   task.maxSessionDurationMinutes = maxSessionDurationMinutes.value;
   // end
-  task.dueDate = dueDate.value ? new Date(dueDate.value + 'T00:00:00') : null;
+  task.dueDate = dueDate.value ?? null;
   task.dueDateConstraint = dueDateConstraint.value;
   task.maxSessionsPerDay = maxSessionsPerDay.value;
   task.maxSessionsPerWeek = maxSessionsPerWeek.value;
@@ -353,7 +353,7 @@ onMounted(() => {
   name.value = task.name;
   brief.value = task.brief;
   priority.value = task.priority;
-  startDate.value = task.startDate ? date.formatDate(task.startDate, 'YYYY-MM-DD') : null;
+  startDate.value = task.startDate ?? null;
   // start
   preferTiming.value = task.preferTiming;
   preferSessionChaining.value = task.preferSessionChaining;
@@ -369,7 +369,7 @@ onMounted(() => {
   minSessionDurationMinutes.value = task.minSessionDurationMinutes;
   maxSessionDurationMinutes.value = task.maxSessionDurationMinutes;
   // end
-  dueDate.value = task.dueDate ? date.formatDate(task.dueDate, 'YYYY-MM-DD') : null;
+  dueDate.value = task.dueDate ?? null;
   dueDateConstraint.value = task.dueDateConstraint;
   maxSessionsPerDay.value = task.maxSessionsPerDay;
   maxSessionsPerWeek.value = task.maxSessionsPerWeek;

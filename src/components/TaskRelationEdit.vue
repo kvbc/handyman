@@ -69,7 +69,7 @@
 </template>
 
 <script setup lang="ts">
-import { useTasksStore } from 'src/stores/tasks';
+import { useTasksStore } from 'src/stores/useTasksStore';
 import type { TaskRelation } from 'src/types';
 import { computed, ref } from 'vue';
 

@@ -52,3 +52,19 @@ export interface Task {
   maxSessionsPerWeek: number | null;
   maxHoursPerWeek: number | null;
 }
+
+/*
+ *
+ * Schedule
+ *
+ */
+
+export interface ScheduledSession {
+  id: string;
+  taskId: number;
+  start: Date;
+  end: Date;
+  generated: boolean;
+  locked: boolean;
+  notificationId?: string | null;
+}

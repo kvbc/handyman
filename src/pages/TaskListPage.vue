@@ -24,6 +24,7 @@
         >
           <q-card-section class="q-pa-sm">
             <div class="text-h6 row items-center q-gutter-x-sm">
+              <q-badge align="middle" color="primary"> #{{ task.id }} </q-badge>
               <div>
                 {{ task.name ? task.name : '???' }}
               </div>
@@ -92,7 +93,7 @@
 </template>
 
 <script setup lang="ts">
-import { useTasksStore } from 'src/stores/tasks';
+import { useTasksStore } from 'src/stores/useTasksStore';
 import { useRouter } from 'vue-router';
 import { date } from 'quasar';
 import { computed } from 'vue';
